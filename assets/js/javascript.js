@@ -1,12 +1,12 @@
-var search = {
+var app = {
     buttonCont: $('#buttons'),
     buttons: ["star wars", "star trek", "battlestar galactica", "dr. who", "stranger things", "x-files"],
     button(text){
-        var btn = $('<button>').addClass('btn btn-search').text(text).appendTo(search.buttonCont);
+        var btn = $('<button>').addClass('btn btn-search').text(text).appendTo(app.buttonCont);
     },
     renderButtons(arr){
         $.each(arr, function(i){
-            search.button(arr[i]);
+            app.button(arr[i]);
         });
     },
     renderGif(obj){
@@ -15,15 +15,16 @@ var search = {
     },
     buttonClick(){
         var searchTerm = $(this).text().replace(' ', '%20');
-        var queryUrl = 'https://api.giphy.com/v1/gifs/search?api_key=MhZnLZX3S3AQ3uqSWeeBpsJ8NXZXl54N&q=' + searchTerm + '&limit=5&offset=0&rating=G&lang=en';
+        var queryUrl = 'https://api.giphy.com/v1/gifs/search?api_key=MhZnLZX3S3AQ3uqSWeeBpsJ8NXZXl54N&q=' + searchTerm + '&limit=10&offset=0&rating=G&lang=en';
 
         $.ajax({
             url: queryUrl,
             method: "GET"
         }).then(function(response){
             var results = response.data;
+            $('#results').empty();
             $.each(results, function(i){
-                search.renderGif(results[i]);
+                app.renderGif(results[i]);
                 console.log(results[i]);
             })
         });
@@ -44,15 +45,20 @@ var search = {
         event.preventDefault();
         var val = $('#input').val().trim();
         if (val !== ''){
-            search.button(val);
+            app.button(val);
             $('#input').val('');
         }
+    },
+    clear(){
+        $('#results').empty();
     }
 }
+$(document).ready(function(){
+    app.renderButtons(app.buttons);
 
-search.renderButtons(search.buttons);
-
-$(document).on('click', '.btn-search', search.buttonClick);
-$(document).on('click', '.img', search.imgClick);
-
-$('#submit').on('click', search.submit);
+    $(document).on('click', '.btn-search', app.buttonClick);
+    $(document).on('click', '.img', app.imgClick);
+    
+    $('#submit').on('click', app.submit);
+    $('#clear').on('click', app.clear);
+});
