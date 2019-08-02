@@ -2,12 +2,15 @@ body{
     padding: 2em 0;
 }
 
-.btn, input, input[type=submit]{
+.btn, input, input[type=submit], .card{
     padding: 1em;
     border: 1px solid black;
-    margin: 0 .5em;
+    margin: .5em;
 }
 
+.card {
+    display: inline-block;
+}
 .row{
     margin-bottom: 1em;
 }
