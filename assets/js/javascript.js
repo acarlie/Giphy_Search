@@ -44,8 +44,10 @@ var app = {
 
         if (src === still){
             $(this).attr('src', gif);
+            $(this).parent().css('background-color', '#444');
         } else {
             $(this).attr('src', still);
+            $(this).parent().css('background-color', '#222');
         }
     },
     submit(){

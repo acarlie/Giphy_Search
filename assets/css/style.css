@@ -2,20 +2,38 @@
 body{
     padding: 2em 0;
     font-size: 16px;
+    background: #111;
+    color: #fff;
+    font-family: 'Blinker', sans-serif;
 }
 
 .btn-wrap, .btn-clear, input, input[type=submit], .card{
-    border: 1px solid black;
     margin: .5em;
-
-    
+    border-radius: .5em;
+    overflow: hidden;
+    background-color: #222;
 }
+
+.btn-wrap:hover, .btn-clear:hover, input[type=submit]:hover, .card:hover{
+    background-color: #444;
+}
+
 
 .btn-wrap{
     display: inline-block;
 }
 
-.btn, input, input[type=submit], .card{
+.btn-search{
+    text-transform: capitalize;
+}
+
+button, input[type=submit], input[type=text]{
+    font-family: 'Blinker', sans-serif;
+
+}
+
+.btn, input, input[type=submit], .card-info{
+    color: #fff;
     padding: 1em;
 }
 
@@ -39,6 +57,7 @@ body{
 }
 
 .img{
+    cursor: pointer;
     object-fit: cover;
     width: 100%;
     height: 100%;

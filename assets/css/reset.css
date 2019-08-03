@@ -81,3 +81,9 @@ button, input[type=submit]{
 button:focus, input:focus{
     outline:0;
 }
+
+input[type=text]{
+    outline: 0;
+    box-shadow: none;
+    border: none;
+}
