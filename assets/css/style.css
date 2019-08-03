@@ -1,14 +1,27 @@
 
 body{
     padding: 2em 0;
+    font-size: 16px;
+}
+
+.btn-wrap, .btn-clear, input, input[type=submit], .card{
+    border: 1px solid black;
+    margin: .5em;
+
+    
+}
+
+.btn-wrap{
+    display: inline-block;
 }
 
 .btn, input, input[type=submit], .card{
     padding: 1em;
-    border: 1px solid black;
-    margin: .5em;
 }
 
+.btn-close{
+    border-left: 1px solid black;
+}
 
 .row{
     margin-bottom: 1em;
@@ -19,20 +32,16 @@ body{
     padding: .5em;
 }
 
-.card {
-    background-color: #eee;
+.card{
     display: inline-block;
     margin: 0 0 1em;
     width: 100%;
-
 }
-
 
 .img{
     object-fit: cover;
     width: 100%;
     height: 100%;
-
 }
 
 @media only screen and (min-width: 1024px) {
