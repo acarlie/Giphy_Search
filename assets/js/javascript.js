@@ -1,6 +1,7 @@
 var app = {
     buttonCont: $('#buttons'),
     starred: [],
+    starView: false,
     buttons: ["star wars", "star trek", "battlestar galactica", "dr. who", "stranger things", "x-files"],
     button(text){
         var btnWrap = $('<div>').addClass('btn-wrap').appendTo(app.buttonCont);
@@ -23,6 +24,7 @@ var app = {
 
     },
     buttonClick(){
+        app.starView = false;
         var searchTerm = $(this).text().replace(' ', '%20');
         var queryUrl = 'https://api.giphy.com/v1/gifs/search?api_key=MhZnLZX3S3AQ3uqSWeeBpsJ8NXZXl54N&q=' + searchTerm + '&limit=15&offset=0&rating=PG&lang=en';
 
@@ -82,16 +84,21 @@ var app = {
             app.starred.push(id);
 
         } else {
-            $(this).attr('data-star', 'false').removeClass('fas').addClass('far');
-            console.log('not starred' + id);
+            if (app.starView){
+                $(this).parent().remove();
+            } else {
+                $(this).attr('data-star', 'false').removeClass('fas').addClass('far');
+                console.log('not starred' + id);
+            }
             app.starred = app.arrayRemove(app.starred, id);
-
         }
         console.log(app.starred);
         console.log('--------------');
     },
     viewStarred(){
         event.preventDefault();
+        app.starView = true;
+
         if (app.starred.length > 0) {
             $('#results').empty();
             $.each(app.starred, function(i){
