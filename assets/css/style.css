@@ -1,4 +1,8 @@
 
+:root{
+    --color-primary: magenta;
+}
+
 body{
     padding: 2em 0;
     font-size: 16px;
@@ -7,17 +11,21 @@ body{
     font-family: 'Blinker', sans-serif;
 }
 
-.btn-wrap, .btn-clear, input, input[type=submit], .card{
+h1{
+    text-align: center;
+    text-shadow: 3px 3px var(--color-primary);
+}
+
+.btn-wrap, .btn-clear, input, input[type=submit], .card, .btn-starred{
     margin: .5em;
     border-radius: .5em;
     overflow: hidden;
     background-color: #222;
 }
 
-.btn-wrap:hover, .btn-clear:hover, input[type=submit]:hover, .card:hover{
+.btn-wrap:hover, .btn-clear:hover, input[type=submit]:hover, .card:hover, .btn-starred:hover{
     background-color: #444;
 }
-
 
 .btn-wrap{
     display: inline-block;
@@ -29,8 +37,8 @@ body{
 
 button, input[type=submit], input[type=text]{
     font-family: 'Blinker', sans-serif;
-
 }
+
 
 .btn, input, input[type=submit], .card-info{
     color: #fff;
@@ -43,6 +51,11 @@ button, input[type=submit], input[type=text]{
 
 .row{
     margin-bottom: 1em;
+}
+
+.row-center{
+    display: flex;
+    justify-content: center;
 }
 
 #results{

@@ -86,6 +86,9 @@ var app = {
         } else {
             if (app.starView){
                 $(this).parent().remove();
+                if (app.starred.length === 1){
+                    $('#results').html('<h2>No more stars :-(</h2>');
+                }
             } else {
                 $(this).attr('data-star', 'false').removeClass('fas').addClass('far');
                 console.log('not starred' + id);
