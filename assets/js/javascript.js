@@ -13,15 +13,25 @@ var app = {
             app.button(arr[i]);
         });
     },
-    renderGif(obj, star, className){
-        var card = $('<div>').addClass('card').prependTo('#results');
+    renderGif(obj){
+        var starredIndex = app.starred.indexOf(obj.id);
+
+        var card = $('<div>').addClass('card bg-dark').prependTo('#results');
         var img = $('<img>').addClass('img').attr('src', obj.images.fixed_height_still.url).attr('data-still', obj.images.fixed_height_still.url).attr('data-gif', obj.images.fixed_height.url).appendTo(card);
         var list = $('<ul>').addClass('card-info').appendTo(card);
         var title = $('<li>').text('Title: ' + obj.title);
         var rating = $('<li>').text('Rating: ' + obj.rating);
-        var star = $('<button>').addClass(className).addClass('btn btn-star fa-star').attr('data-id', obj.id).attr('data-star', star).appendTo(card);
-        list.append(title, rating);
+        var star = $('<button>').addClass('btn btn-star fa-star').attr('data-id', obj.id);
 
+
+        if (starredIndex === -1){
+            star.addClass('far').attr('data-star', 'false');
+        } else {
+            star.addClass('fas').attr('data-star', 'true');
+        }
+        
+        card.append(star);
+        list.append(title, rating);
     },
     buttonClick(){
         app.starView = false;
@@ -35,23 +45,24 @@ var app = {
             var results = response.data;
             $('#results').empty();
             $.each(results, function(i){
-                app.renderGif(results[i], 'false', 'far');
+                app.renderGif(results[i]);
                 // console.log(results[i]);
             })
         });
 
     },
     imgClick(){
-        var still = $(this).attr('data-still');
-        var gif = $(this).attr('data-gif');
-        var src = $(this).attr('src');
+        var img = $(this).find('img');
+        var still = img.attr('data-still');
+        var gif = img.attr('data-gif');
+        var src = img.attr('src');
 
         if (src === still){
-            $(this).attr('src', gif);
-            $(this).parent().css('background-color', '#444');
+            img.attr('src', gif);
+            $(this).removeClass('bg-dark').addClass('bg-light');
         } else {
-            $(this).attr('src', still);
-            $(this).parent().css('background-color', '#222');
+            img.attr('src', still);
+            $(this).removeClass('bg-light').addClass('bg-dark');
         }
     },
     submit(){
@@ -111,7 +122,7 @@ var app = {
                     url: queryUrl,
                     method: "GET"
                 }).then(function(response){
-                    app.renderGif(response.data, 'true', 'fas');
+                    app.renderGif(response.data);
                 });
 
             });
@@ -130,7 +141,7 @@ $(document).ready(function(){
     $(document).on('click', '.btn-search', app.buttonClick);
     $(document).on('click', '.btn-close', app.close);
     $(document).on('click', '.btn-star', app.star)
-    $(document).on('click', '.img', app.imgClick);
+    $(document).on('click', '.card', app.imgClick);
     
     $('#submit').on('click', app.submit);
     $('#starred').on('click', app.viewStarred);

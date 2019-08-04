@@ -16,14 +16,24 @@ h1{
     text-shadow: 3px 3px var(--color-primary);
 }
 
-.btn-wrap, .btn-clear, input, input[type=submit], .card, .btn-starred{
+.btn-wrap, .btn-clear, input, input[type=submit], .btn-starred, .card{
     margin: .5em;
     border-radius: .5em;
     overflow: hidden;
+}
+
+.bg-light, .bg-light:hover, .bg-dark:hover{
+    background-color: #444;
+}
+
+
+.btn-wrap, .btn-clear, input, input[type=submit], .btn-starred, .bg-dark{
     background-color: #222;
 }
 
-.btn-wrap:hover, .btn-clear:hover, input[type=submit]:hover, .card:hover, .btn-starred:hover{
+
+
+.btn-wrap:hover, .btn-clear:hover, input[type=submit]:hover, .btn-starred:hover{
     background-color: #444;
 }
 
@@ -64,13 +74,13 @@ button, input[type=submit], input[type=text]{
 }
 
 .card{
+    cursor: pointer;
     display: inline-block;
     margin: 0 0 1em;
     width: 100%;
 }
 
 .img{
-    cursor: pointer;
     object-fit: cover;
     width: 100%;
     height: 100%;
