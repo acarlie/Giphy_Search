@@ -3,6 +3,7 @@
     --color-primary: magenta;
     --primary-gradient: linear-gradient(45deg, #ff00cc, #333399); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     --dark-gradient: linear-gradient(to right, #232323, #101010);
+    --danger-gradient: linear-gradient(45deg,#c31432, #240b36); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     --light-gradient: linear-gradient(to right, #404040, #242424);
 
 }
@@ -15,40 +16,63 @@ body{
     font-family: 'Blinker', sans-serif;
 }
 
-.text-center{
-    text-align: center;
-}
-
+/*---------------Typography---------------*/
 h1{
     text-align: center;
     text-shadow: 3px 3px var(--color-primary);
 }
 
-.btn-wrap, .btn-clear, .btn-starred, .input-wrap{
+.text-center{
+    text-align: center;
+}
+
+button, input[type=text]{
+    font-family: 'Blinker', sans-serif;
+}
+
+.btn, input, .card-info{
+    color: #fff;
+}
+
+/*---------------Layout & Padding---------------*/
+.row{
+    margin-bottom: 1em;
+}
+
+.btn, input, .card-info{
+    padding: 1em;
+}
+
+#results{
+    column-gap: 1em;
+    padding: .5em;
+}
+
+/*---------------Buttons & Forms---------------*/
+.btn{
+    text-transform: capitalize;
+}
+
+.wrap{
+    display: inline-block;
+}
+
+.wrap, .btn{
+    background-color: #222;
     border-radius: .5em;
     overflow: hidden;
     margin: .5em;
-
 }
 
-
-.input-wrap:hover{
-    background-color: #444;
+.btn-close{
+    border-left: 1px solid black;
 }
 
-.bg-light, .bg-light:hover, .bg-dark:hover{
-    background: var(--light-gradient);
+.btn-color{
+    background: var(--primary-gradient);
 }
 
-.btn-wrap, .btn-clear, .btn-starred, .input-wrap{
-    background-color: #222;
-}
-
-.bg-dark{
-    background: var(--dark-gradient);
-}
-
-.btn.btn-star{
+.btn-star{
     position: absolute;
     top: 0;
     right: 0;
@@ -57,14 +81,22 @@ h1{
     border-radius: 0 .5em 0 1em;
 }
 
-.btn-wrap:hover, .btn-clear:hover, .btn-starred:hover{
+/*Hovers*/
+.btn:hover, .wrap:hover{
     background-color: #444;
 }
 
-.btn-wrap{
-    display: inline-block;
+/*.btn remove styling for wrapped items and stars*/
+.wrap .btn, .btn-star{
+    border-radius: 0;
+    margin: 0;
 }
 
+.wrap .btn, .wrap .btn:hover{
+    background: none;
+}
+
+/*Inputs*/
 .input-wrap, form{
     display: flex;
 }
@@ -78,43 +110,7 @@ input[type=text]{
     width: 100%;
 }
 
-button[type=submit]{
-    display: inline-block;
-    color: #fff;
-}
-
-.btn-search{
-    text-transform: capitalize;
-}
-
-button, input[type=text]{
-    font-family: 'Blinker', sans-serif;
-}
-
-
-.btn, input, button[type=submit], .card-info{
-    color: #fff;
-    padding: 1em;
-}
-
-.btn-close{
-    border-left: 1px solid black;
-}
-
-.row{
-    margin-bottom: 1em;
-}
-/* 
-.row-center{
-    display: flex;
-    justify-content: center;
-} */
-
-#results{
-    column-gap: 1em;
-    padding: .5em;
-}
-
+/*---------------Cards---------------*/
 .card-wrap{
     position: relative;
     overflow: hidden;
@@ -131,7 +127,6 @@ button, input[type=text]{
     width: 100%;
     border-radius: .5em .8em 0em 0em;
     overflow: hidden;
-    /* border-bottom: 3px solid magenta; */
 }
 
 .img{
@@ -141,6 +136,16 @@ button, input[type=text]{
     height: 100%;
 }
 
+.bg-light, .bg-light:hover, .bg-dark:hover{
+    background: var(--light-gradient);
+}
+
+.bg-dark{
+    background: var(--dark-gradient);
+}
+
+
+/*---------------Animations---------------*/
 /* Pop from Hover CSS*/
 @-webkit-keyframes hvr-pop {
     50% {
@@ -168,6 +173,7 @@ button, input[type=text]{
 }
   
 
+/*---------------Media Queries---------------*/
 @media only screen and (min-width: 1024px) {
     #results {
         column-count: 4;

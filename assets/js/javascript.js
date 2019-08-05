@@ -4,7 +4,7 @@ var app = {
     starView: false,
     buttons: ["star wars", "star trek", "battlestar galactica", "dr. who", "stranger things", "x-files"],
     button(text){
-        var btnWrap = $('<div>').addClass('btn-wrap').appendTo(app.buttonCont);
+        var btnWrap = $('<div>').addClass('wrap').appendTo(app.buttonCont);
         var btn = $('<button>').addClass('btn btn-search').text(text).appendTo(btnWrap);
         var close = $('<button>').addClass('fas fa-times btn btn-close').appendTo(btnWrap);
     },
