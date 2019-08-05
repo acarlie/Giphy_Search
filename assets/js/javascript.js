@@ -6,7 +6,7 @@ var app = {
     button(text){
         var btnWrap = $('<div>').addClass('wrap').appendTo(app.buttonCont);
         var btn = $('<button>').addClass('btn btn-search').text(text).appendTo(btnWrap);
-        var close = $('<button>').addClass('fas fa-times btn btn-right').appendTo(btnWrap);
+        var close = $('<button>').addClass('fas fa-times btn btn-right btn-close').appendTo(btnWrap);
     },
     renderButtons(arr){
         $.each(arr, function(i){

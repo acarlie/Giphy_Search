@@ -106,6 +106,10 @@ button, input[type=text]{
     border-radius: 0 .5em 0 1em;
 }
 
+/* .fa-star:hover{
+    transform: rotate(15deg);
+} */
+
 .btn-icon{
     margin-left: .5em;
 }
