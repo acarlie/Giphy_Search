@@ -23,7 +23,8 @@ var app = {
         var title = $('<li>').text('Title: ' + obj.title);
         var rating = $('<li>').text('Rating: ' + obj.rating);
         var star = $('<button>').addClass('btn btn-star fa-star').attr('data-id', obj.id);
-        var copyBtn = $('<button>').addClass('btn btn-copy').text('Copy Link').attr('data-link', obj.embed_url).appendTo(card);
+        var copyBtn = $('<button>').addClass('btn btn-copy').attr('data-link', obj.embed_url).appendTo(card);
+        var copyText = $('<span>').addClass('btn-copy-text').text('Copy Link').appendTo(copyBtn);
         var copyIcon = $('<span>').addClass('fas fa-link btn-icon').appendTo(copyBtn);
 
 
@@ -36,14 +37,10 @@ var app = {
         list.append(title, rating);
         cardWrap.append(star);
     },
-    buttonClick(){
-        $('#message').empty();
-
-        app.starView = false;
-        var searchTerm = $(this).text().replace(' ', '%20');
+    getByTerm(term){
+        var searchTerm = term.replace(' ', '%20');
         var queryUrl = 'https://api.giphy.com/v1/gifs/search?api_key=MhZnLZX3S3AQ3uqSWeeBpsJ8NXZXl54N&q=' + searchTerm + '&limit=15&offset=0&rating=PG&lang=en';
 
-        
         $.ajax({
             url: queryUrl,
             method: "GET"
@@ -57,8 +54,14 @@ var app = {
             })
             // ScrollReveal().reveal('.card', { delay: 500 });
         });
+    },
+    buttonClick(){
+        $('#message').empty();
 
+        app.starView = false;
+        var term = $(this).text();
 
+        app.getByTerm(term);
     },
     imgClick(){
         var card = $(this);
@@ -86,14 +89,21 @@ var app = {
     },
     copyToClipboard(){
         var link = $(this).attr('data-link');
-    
+        var btnText = $(this).children('.btn-copy-text');    
 
         if (document.queryCommandSupported("copy")) {
+
             var temp = $("<input>");
             $('body').append(temp);
             temp.val(link).select();
             document.execCommand("copy");
             temp.remove();
+
+            btnText.text('Copied!');
+            setTimeout(function(){
+                btnText.text('Copy Link');
+            }, 3000);
+
             // console.log(link);
         } else {
             //modal with link Url
@@ -105,6 +115,7 @@ var app = {
         if (val !== ''){
             app.button(val);
             $('#input').val('');
+            app.getByTerm(val);
         }
     },
     close(){
