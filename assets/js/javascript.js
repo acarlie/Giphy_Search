@@ -15,8 +15,8 @@ var app = {
     },
     renderGif(obj){
         var starredIndex = app.starred.indexOf(obj.id);
-
-        var card = $('<div>').addClass('card bg-dark').prependTo('#results');
+        var cardWrap = $('<div>').addClass('card-wrap').prependTo('#results');
+        var card = $('<div>').addClass('card bg-dark').appendTo(cardWrap);
         var img = $('<img>').addClass('img').attr('src', obj.images.fixed_height_still.url).attr('data-still', obj.images.fixed_height_still.url).attr('data-gif', obj.images.fixed_height.url).appendTo(card);
         var list = $('<ul>').addClass('card-info').appendTo(card);
         var title = $('<li>').text('Title: ' + obj.title);
@@ -30,14 +30,17 @@ var app = {
             star.addClass('fas').attr('data-star', 'true');
         }
         
-        card.append(star);
         list.append(title, rating);
+        cardWrap.append(star);
     },
     buttonClick(){
+        $('#message').empty();
+
         app.starView = false;
         var searchTerm = $(this).text().replace(' ', '%20');
         var queryUrl = 'https://api.giphy.com/v1/gifs/search?api_key=MhZnLZX3S3AQ3uqSWeeBpsJ8NXZXl54N&q=' + searchTerm + '&limit=15&offset=0&rating=PG&lang=en';
 
+        
         $.ajax({
             url: queryUrl,
             method: "GET"
@@ -47,23 +50,36 @@ var app = {
             $.each(results, function(i){
                 app.renderGif(results[i]);
                 // console.log(results[i]);
+
             })
+            // ScrollReveal().reveal('.card', { delay: 500 });
         });
+
 
     },
     imgClick(){
-        var img = $(this).find('img');
+        var card = $(this);
+
+        card.parent().addClass('hvr-pop')
+        
+        setTimeout(function(){
+            card.parent().removeClass('hvr-pop');
+        }, 200);
+
+        var img = card.find('img');
         var still = img.attr('data-still');
         var gif = img.attr('data-gif');
         var src = img.attr('src');
 
         if (src === still){
             img.attr('src', gif);
-            $(this).removeClass('bg-dark').addClass('bg-light');
+            card.removeClass('bg-dark').addClass('bg-light');
         } else {
             img.attr('src', still);
-            $(this).removeClass('bg-light').addClass('bg-dark');
+            card.removeClass('bg-light').addClass('bg-dark');
         }
+
+
     },
     submit(){
         event.preventDefault();
@@ -78,6 +94,7 @@ var app = {
     },
     clear(){
         event.preventDefault();
+        $('#message').empty();
         $('#results').empty();
     },
     arrayRemove(arr, value) {
@@ -98,7 +115,7 @@ var app = {
             if (app.starView){
                 $(this).parent().remove();
                 if (app.starred.length === 1){
-                    $('#results').html('<h2>No more stars :-(</h2>');
+                    $('#message').text('No more stars :-(');
                 }
             } else {
                 $(this).attr('data-star', 'false').removeClass('fas').addClass('far');
@@ -128,12 +145,13 @@ var app = {
             });
 
         } else {
-            $('#results').empty().html('<h2>No stars yet :-(</h2>');
+            $('#results').empty();
+            $('#message').text('No stars yet :-(');
 
         }
     }
-
 }
+
 
 $(document).ready(function(){
     app.renderButtons(app.buttons);

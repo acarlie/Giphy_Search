@@ -87,6 +87,7 @@ button:focus, input:focus{
 }
 
 input[type=text]{
+    background: none;
     outline: 0;
     box-shadow: none;
     border: none;

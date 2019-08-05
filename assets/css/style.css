@@ -1,6 +1,10 @@
 
 :root{
     --color-primary: magenta;
+    --primary-gradient: linear-gradient(45deg, #ff00cc, #333399); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    --dark-gradient: linear-gradient(to right, #232323, #101010);
+    --light-gradient: linear-gradient(to right, #404040, #242424);
+
 }
 
 body{
@@ -11,29 +15,49 @@ body{
     font-family: 'Blinker', sans-serif;
 }
 
+.text-center{
+    text-align: center;
+}
+
 h1{
     text-align: center;
     text-shadow: 3px 3px var(--color-primary);
 }
 
-.btn-wrap, .btn-clear, input, input[type=submit], .btn-starred, .card{
-    margin: .5em;
+.btn-wrap, .btn-clear, .btn-starred, .input-wrap{
     border-radius: .5em;
     overflow: hidden;
+    margin: .5em;
+
 }
 
-.bg-light, .bg-light:hover, .bg-dark:hover{
+
+.input-wrap:hover{
     background-color: #444;
 }
 
+.bg-light, .bg-light:hover, .bg-dark:hover{
+    background: var(--light-gradient);
+}
 
-.btn-wrap, .btn-clear, input, input[type=submit], .btn-starred, .bg-dark{
+.btn-wrap, .btn-clear, .btn-starred, .input-wrap{
     background-color: #222;
 }
 
+.bg-dark{
+    background: var(--dark-gradient);
+}
 
+.btn.btn-star{
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 1.25em;
+    background: var(--primary-gradient);
+    border-radius: 0 .5em 0 1em;
+}
 
-.btn-wrap:hover, .btn-clear:hover, input[type=submit]:hover, .btn-starred:hover{
+.btn-wrap:hover, .btn-clear:hover, .btn-starred:hover{
     background-color: #444;
 }
 
@@ -41,16 +65,34 @@ h1{
     display: inline-block;
 }
 
+.input-wrap, form{
+    display: flex;
+}
+
+.input-wrap{
+    width: 100%;
+}
+
+input[type=text]{
+    display: inline-block;
+    width: 100%;
+}
+
+button[type=submit]{
+    display: inline-block;
+    color: #fff;
+}
+
 .btn-search{
     text-transform: capitalize;
 }
 
-button, input[type=submit], input[type=text]{
+button, input[type=text]{
     font-family: 'Blinker', sans-serif;
 }
 
 
-.btn, input, input[type=submit], .card-info{
+.btn, input, button[type=submit], .card-info{
     color: #fff;
     padding: 1em;
 }
@@ -62,33 +104,77 @@ button, input[type=submit], input[type=text]{
 .row{
     margin-bottom: 1em;
 }
-
+/* 
 .row-center{
     display: flex;
     justify-content: center;
-}
+} */
 
 #results{
     column-gap: 1em;
     padding: .5em;
 }
 
+.card-wrap{
+    position: relative;
+    overflow: hidden;
+    background: var(--primary-gradient);
+    padding-bottom: 0;
+    margin-bottom: 1em;
+    border-radius: .5em;
+}
+
 .card{
     cursor: pointer;
     display: inline-block;
-    margin: 0 0 1em;
+    margin: 0 0 0 0;
     width: 100%;
+    border-radius: .5em .8em 0em 0em;
+    overflow: hidden;
+    /* border-bottom: 3px solid magenta; */
 }
 
 .img{
+    position: relative;
     object-fit: cover;
     width: 100%;
     height: 100%;
 }
 
+/* Pop from Hover CSS*/
+@-webkit-keyframes hvr-pop {
+    50% {
+        -webkit-transform: scale(1.04);
+        transform: scale(1.04);
+    }
+}
+
+@keyframes hvr-pop {
+    50% {
+        -webkit-transform: scale(1.04);
+        transform: scale(1.04);
+    }
+}
+
+.hvr-pop {
+    -webkit-animation-name: hvr-pop;
+    animation-name: hvr-pop;
+    -webkit-animation-duration: 0.2s;
+    animation-duration: 0.2s;
+    -webkit-animation-timing-function: linear;
+    animation-timing-function: linear;
+    -webkit-animation-iteration-count: 1;
+    animation-iteration-count: 1;
+}
+  
+
 @media only screen and (min-width: 1024px) {
     #results {
         column-count: 4;
+    }
+    .search-container{
+        width: 60%;
+        margin: 0 auto;
     }
 }
 
