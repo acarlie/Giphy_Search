@@ -6,7 +6,7 @@ var app = {
     button(text){
         var btnWrap = $('<div>').addClass('wrap').appendTo(app.buttonCont);
         var btn = $('<button>').addClass('btn btn-search').text(text).appendTo(btnWrap);
-        var close = $('<button>').addClass('fas fa-times btn btn-close').appendTo(btnWrap);
+        var close = $('<button>').addClass('fas fa-times btn btn-right').appendTo(btnWrap);
     },
     renderButtons(arr){
         $.each(arr, function(i){
@@ -17,11 +17,14 @@ var app = {
         var starredIndex = app.starred.indexOf(obj.id);
         var cardWrap = $('<div>').addClass('card-wrap').prependTo('#results');
         var card = $('<div>').addClass('card bg-dark').appendTo(cardWrap);
-        var img = $('<img>').addClass('img').attr('src', obj.images.fixed_height_still.url).attr('data-still', obj.images.fixed_height_still.url).attr('data-gif', obj.images.fixed_height.url).appendTo(card);
-        var list = $('<ul>').addClass('card-info').appendTo(card);
+        var clickWrap = $('<div>').addClass('card-click').appendTo(card);
+        var img = $('<img>').addClass('img').attr('src', obj.images.fixed_height_still.url).attr('data-still', obj.images.fixed_height_still.url).attr('data-gif', obj.images.fixed_height.url).appendTo(clickWrap);
+        var list = $('<ul>').addClass('card-info').appendTo(clickWrap);
         var title = $('<li>').text('Title: ' + obj.title);
         var rating = $('<li>').text('Rating: ' + obj.rating);
         var star = $('<button>').addClass('btn btn-star fa-star').attr('data-id', obj.id);
+        var copyBtn = $('<button>').addClass('btn btn-copy').text('Copy Link').attr('data-link', obj.embed_url).appendTo(card);
+        var copyIcon = $('<span>').addClass('fas fa-link btn-icon').appendTo(copyBtn);
 
 
         if (starredIndex === -1){
@@ -60,10 +63,10 @@ var app = {
     imgClick(){
         var card = $(this);
 
-        card.parent().addClass('hvr-pop')
+        card.parent().parent().addClass('hvr-pop')
         
         setTimeout(function(){
-            card.parent().removeClass('hvr-pop');
+            card.parent().parent().removeClass('hvr-pop');
         }, 200);
 
         var img = card.find('img');
@@ -73,13 +76,28 @@ var app = {
 
         if (src === still){
             img.attr('src', gif);
-            card.removeClass('bg-dark').addClass('bg-light');
+            card.parent().removeClass('bg-dark').addClass('bg-light');
         } else {
             img.attr('src', still);
-            card.removeClass('bg-light').addClass('bg-dark');
+            card.parent().removeClass('bg-light').addClass('bg-dark');
         }
 
 
+    },
+    copyToClipboard(){
+        var link = $(this).attr('data-link');
+    
+
+        if (document.queryCommandSupported("copy")) {
+            var temp = $("<input>");
+            $('body').append(temp);
+            temp.val(link).select();
+            document.execCommand("copy");
+            temp.remove();
+            // console.log(link);
+        } else {
+            //modal with link Url
+        }
     },
     submit(){
         event.preventDefault();
@@ -147,7 +165,6 @@ var app = {
         } else {
             $('#results').empty();
             $('#message').text('No stars yet :-(');
-
         }
     }
 }
@@ -159,7 +176,8 @@ $(document).ready(function(){
     $(document).on('click', '.btn-search', app.buttonClick);
     $(document).on('click', '.btn-close', app.close);
     $(document).on('click', '.btn-star', app.star)
-    $(document).on('click', '.card', app.imgClick);
+    $(document).on('click', '.card-click', app.imgClick);
+    $(document).on('click', '.btn-copy', app.copyToClipboard)
     
     $('#submit').on('click', app.submit);
     $('#starred').on('click', app.viewStarred);
