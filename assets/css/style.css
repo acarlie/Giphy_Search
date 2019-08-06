@@ -8,7 +8,7 @@
 }
 
 body{
-    font-size: 15px;
+    font-size: 14px;
     background-color: #000;
     color: #fff;
     font-family: 'Blinker', sans-serif;
@@ -65,9 +65,12 @@ button, input[type=text]{
     color: #fff;
 }
 
+
+
 /*---------------Buttons & Forms---------------*/
 .btn{
     text-transform: capitalize;
+    text-align: center;
 }
 
 .wrap{
@@ -120,6 +123,10 @@ button, input[type=text]{
     margin-left: .5em;
 }
 
+div.wrap.active, button.btn.active{
+    background: var(--primary-gradient);
+}
+
 /*Hovers*/
 .btn:hover, .wrap:hover, input[type=text]:focus, input[type=text]:focus ~ .btn-add{
     background-color: #444;
@@ -142,7 +149,7 @@ button, input[type=text]{
 }
 
 .input-wrap{
-    width: 100%;
+    width: 60%;
 }
 
 input[type=text]{
@@ -261,6 +268,10 @@ input[type=text]{
 
 /*---------------Media Queries---------------*/
 @media only screen and (min-width: 1024px) {
+    body{
+        font-size: 16px;
+    }
+
     h1{
         font-size: 4em;
     }
@@ -270,18 +281,31 @@ input[type=text]{
     }
 
     .search-container{
-        width: 60%;
+        width: 65%;
         margin: 0 auto;
+    }
+
+    .input-wrap{
+        width: 85%;
     }
 }
 
 @media only screen and (max-width: 1023px) and (min-width: 768px) {
+
+    .input-wrap{
+        width: 85%;
+    }
+
     #results {
         column-count: 3;
     }
 }
 
 @media only screen and (max-width: 767px) and (min-width: 540px) {
+    .input-wrap{
+        width: 70%;
+    }
+
     #results {
         column-count: 2;
     }

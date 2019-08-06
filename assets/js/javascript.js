@@ -3,16 +3,24 @@ var app = {
     starred: [],
     starView: false,
     buttons: ["star wars", "star trek", "battlestar galactica", "dr. who", "stranger things", "x-files"],
-    button(text){
+    init(){
+        this.renderButtons(app.buttons);
+        this.trending();
+    },
+    button(text, isSearch){
         var btnWrap = $('<div>').addClass('wrap').prependTo(this.buttonCont);
         var btn = $('<button>').addClass('btn btn-search').text(text);
         var close = $('<button>').addClass('fas fa-times btn btn-right btn-close');
+
+        if(isSearch){
+            app.buttonActive(btnWrap);
+        }
         
         btnWrap.append(btn, close)
     },
     renderButtons(arr){
         $.each(arr, function(i){
-            app.button(arr[i]);
+            app.button(arr[i], false);
         });
     },
     renderCards(obj){
@@ -68,10 +76,32 @@ var app = {
             })
         });
     },
+    trending(){
+        $.ajax({
+            url:'https://api.giphy.com/v1/gifs/trending?api_key=MhZnLZX3S3AQ3uqSWeeBpsJ8NXZXl54N&limit=15&rating=PG',
+            method: "GET"
+        }).then(function(response){
+            var results = response.data;
+            $('#results').empty();
+            $.each(results, function(i){
+                app.renderCards(results[i]);
+            })
+        });
+    },
+    trendingClick(){
+        event.preventDefault();
+        var btn = $(this);
+        app.buttonActive(btn);
+        app.trending();
+    },
     buttonClick(){
         $('#message').empty();
 
         app.starView = false;
+
+        var btn = $(this).parent();
+        app.buttonActive(btn);
+
         var term = $(this).text();
 
         app.getByTerm(term);
@@ -98,6 +128,15 @@ var app = {
             card.parent().removeClass('bg-light').addClass('bg-dark');
         }
 
+    },
+    buttonActive(btn){
+        app.removeActive();
+        btn.addClass('active');
+        console.log(btn);
+    },
+    removeActive(){
+        $('.btn').removeClass('active');
+        $('.wrap').removeClass('active');
     },
     copyToClipboard(){
         var link = $(this).attr('data-link');
@@ -128,7 +167,7 @@ var app = {
         event.preventDefault();
         var val = $('#input').val().trim();
         if (val !== ''){
-            app.button(val);
+            app.button(val, true);
             $('#input').val('');
             app.getByTerm(val);
         }
@@ -138,6 +177,7 @@ var app = {
     },
     clear(){
         event.preventDefault();
+        app.removeActive();
         $('#message').empty();
         $('#results').empty();
     },
@@ -169,6 +209,8 @@ var app = {
     viewStarred(){
         event.preventDefault();
         app.starView = true;
+        var btn = $(this);
+        app.buttonActive(btn);
 
         if (app.starred.length > 0) {
             $('#results').empty();
@@ -191,15 +233,16 @@ var app = {
 
 
 $(document).ready(function(){
-    app.renderButtons(app.buttons);
+    app.init();
 
     $(document).on('click', '.btn-search', app.buttonClick);
     $(document).on('click', '.btn-close', app.delete);
     $(document).on('click', '.btn-star', app.star)
     $(document).on('click', '.card-click', app.imgClick);
-    $(document).on('click', '.btn-copy', app.copyToClipboard)
-    
+    $(document).on('click', '.btn-copy', app.copyToClipboard);
+
     $('#search').on('click', app.search);
+    $('#trending').on('click', app.trendingClick);
     $('#starred').on('click', app.viewStarred);
     $('#clear').on('click', app.clear);
 });
