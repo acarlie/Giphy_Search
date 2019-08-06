@@ -2,9 +2,10 @@ var app = {
     buttonCont: $('#buttons'),
     starred: [],
     starView: false,
-    buttons: ["star wars", "star trek", "battlestar galactica", "dr. who", "stranger things", "x-files"],
+    buttons: [],
     init(){
         app.getStarred();
+        app.getButtonArr();
 
         this.renderButtons(app.buttons);
         this.trending();
@@ -12,7 +13,7 @@ var app = {
     button(text, isSearch){
         var btnWrap = $('<div>').addClass('wrap').prependTo(this.buttonCont);
         var btn = $('<button>').addClass('btn btn-search').text(text);
-        var close = $('<button>').addClass('fas fa-times btn btn-right btn-close');
+        var close = $('<button>').addClass('fas fa-times btn btn-right btn-close').attr('text', text);
 
         if(isSearch){
             app.buttonActive(btnWrap);
@@ -167,10 +168,15 @@ var app = {
         if (val !== ''){
             app.button(val, true);
             $('#input').val('');
+            app.buttons.push(val);
+            app.setButtonArr();
             app.getByTerm(val);
         }
     },
     delete(){
+        var text = $(this).attr('text');
+        app.buttons = app.arrayRemove(app.buttons, text);
+        app.setButtonArr();
         $(this).parent().remove();
     },
     reset(){
@@ -186,6 +192,18 @@ var app = {
         return arr.filter(function(ele){
             return ele != value;
         });
+    },
+    getButtonArr(){
+        var buttonArr = JSON.parse(localStorage.getItem("buttons"));
+
+        if (!Array.isArray(buttonArr)) {
+            this.buttons = ["star wars", "star trek", "battlestar galactica", "dr. who", "stranger things", "x-files"];
+        } else {
+            this.buttons = buttonArr;
+        }
+    },
+    setButtonArr(){
+        localStorage.setItem("buttons", JSON.stringify(app.buttons));
     },
     getStarred(){
         var starArr = JSON.parse(localStorage.getItem("starred"));
