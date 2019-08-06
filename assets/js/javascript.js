@@ -93,6 +93,7 @@ var app = {
     trendingClick(){
         event.preventDefault();
         var btn = $(this);
+        $('#message').empty();
         app.buttonActive(btn);
         app.trending();
     },
@@ -222,6 +223,7 @@ var app = {
     viewStarred(){
         event.preventDefault();
         app.starView = true;
+        $('#message').empty();
         app.getStarred();
         var btn = $(this);
         app.buttonActive(btn);
