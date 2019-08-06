@@ -4,6 +4,12 @@ var app = {
     starView: false,
     buttons: ["star wars", "star trek", "battlestar galactica", "dr. who", "stranger things", "x-files"],
     init(){
+        app.getStarred();
+
+        if (!Array.isArray(this.starred)) {
+          this.starred = [];
+        }
+
         this.renderButtons(app.buttons);
         this.trending();
     },
@@ -95,15 +101,14 @@ var app = {
         app.trending();
     },
     buttonClick(){
-        $('#message').empty();
+        event.preventDefault();
 
+        $('#message').empty();
         app.starView = false;
 
         var btn = $(this).parent();
-        app.buttonActive(btn);
-
         var term = $(this).text();
-
+        app.buttonActive(btn);
         app.getByTerm(term);
     },
     imgClick(){
@@ -185,6 +190,12 @@ var app = {
             return ele != value;
         });
     },
+    getStarred(){
+        app.starred = JSON.parse(localStorage.getItem("starred"));
+    },
+    setStarred(){
+        localStorage.setItem("starred", JSON.stringify(app.starred));
+    },
     star(){
         var id = $(this).attr('data-id');
         var starred = $(this).attr('data-star');
@@ -192,6 +203,7 @@ var app = {
         if (starred === 'false'){
             $(this).attr('data-star', 'true').removeClass('far').addClass('fas');
             app.starred.push(id);
+            app.setStarred();
 
         } else {
             if (app.starView){
@@ -203,11 +215,13 @@ var app = {
                 $(this).attr('data-star', 'false').removeClass('fas').addClass('far');
             }
             app.starred = app.arrayRemove(app.starred, id);
+            app.setStarred();
         }
     },
     viewStarred(){
         event.preventDefault();
         app.starView = true;
+        app.getStarred();
         var btn = $(this);
         app.buttonActive(btn);
 
