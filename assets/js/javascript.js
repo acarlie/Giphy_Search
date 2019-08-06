@@ -6,10 +6,6 @@ var app = {
     init(){
         app.getStarred();
 
-        if (!Array.isArray(this.starred)) {
-          this.starred = [];
-        }
-
         this.renderButtons(app.buttons);
         this.trending();
     },
@@ -191,7 +187,12 @@ var app = {
         });
     },
     getStarred(){
-        app.starred = JSON.parse(localStorage.getItem("starred"));
+        var starArr = JSON.parse(localStorage.getItem("starred"));
+        if (!Array.isArray(starArr)) {
+            this.starred = [];
+        } else {
+            this.starred = starArr;
+        }
     },
     setStarred(){
         localStorage.setItem("starred", JSON.stringify(app.starred));
