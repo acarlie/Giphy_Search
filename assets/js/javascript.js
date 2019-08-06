@@ -71,11 +71,7 @@ var app = {
             url: queryUrl,
             method: "GET"
         }).then(function(response){
-            var results = response.data;
-            $('#results').empty();
-            $.each(results, function(i){
-                app.renderCards(results[i]);
-            })
+            app.then(response);
         });
     },
     trending(){
@@ -83,24 +79,25 @@ var app = {
             url:'https://api.giphy.com/v1/gifs/trending?api_key=MhZnLZX3S3AQ3uqSWeeBpsJ8NXZXl54N&limit=15&rating=PG',
             method: "GET"
         }).then(function(response){
-            var results = response.data;
-            $('#results').empty();
-            $.each(results, function(i){
-                app.renderCards(results[i]);
-            })
+            app.then(response);
         });
+    },
+    then(response){
+        var results = response.data;
+        app.reset();
+        $.each(results, function(i){
+            app.renderCards(results[i]);
+        })
     },
     trendingClick(){
         event.preventDefault();
         var btn = $(this);
-        $('#message').empty();
         app.buttonActive(btn);
         app.trending();
     },
     buttonClick(){
         event.preventDefault();
 
-        $('#message').empty();
         app.starView = false;
 
         var btn = $(this).parent();
@@ -176,11 +173,14 @@ var app = {
     delete(){
         $(this).parent().remove();
     },
+    reset(){
+        $('#message').empty();
+        $('#results').empty();
+    },
     clear(){
         event.preventDefault();
         app.removeActive();
-        $('#message').empty();
-        $('#results').empty();
+        app.reset();
     },
     arrayRemove(arr, value) {
         return arr.filter(function(ele){
@@ -223,13 +223,12 @@ var app = {
     viewStarred(){
         event.preventDefault();
         app.starView = true;
-        $('#message').empty();
+        app.reset();
         app.getStarred();
         var btn = $(this);
         app.buttonActive(btn);
 
         if (app.starred.length > 0) {
-            $('#results').empty();
             $.each(app.starred, function(i){
                 var queryUrl = 'https://api.giphy.com/v1/gifs/' + app.starred[i] + '?api_key=MhZnLZX3S3AQ3uqSWeeBpsJ8NXZXl54N';
                 $.ajax({
@@ -241,7 +240,6 @@ var app = {
             });
 
         } else {
-            $('#results').empty();
             $('#message').text('No stars yet :-(');
         }
     }
