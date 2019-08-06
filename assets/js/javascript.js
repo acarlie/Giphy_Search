@@ -132,7 +132,6 @@ var app = {
     buttonActive(btn){
         app.removeActive();
         btn.addClass('active');
-        console.log(btn);
     },
     removeActive(){
         $('.btn').removeClass('active');
