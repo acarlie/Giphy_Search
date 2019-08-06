@@ -39,13 +39,18 @@ body{
     padding: .5em;
 }
 
-
 /*---------------Typography---------------*/
+
 h1{
-    text-align: center;
     text-shadow: 3px 3px var(--color-primary);
+    text-align: center;
     font-weight: 800;
     margin-bottom: 14px;
+}
+
+h2{
+    font-weight: 700;
+    color: #444;
 }
 
 .text-center{

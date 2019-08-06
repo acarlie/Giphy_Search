@@ -4,18 +4,20 @@ var app = {
     starView: false,
     buttons: ["star wars", "star trek", "battlestar galactica", "dr. who", "stranger things", "x-files"],
     button(text){
-        var btnWrap = $('<div>').addClass('wrap').prependTo(app.buttonCont);
-        var btn = $('<button>').addClass('btn btn-search').text(text).appendTo(btnWrap);
-        var close = $('<button>').addClass('fas fa-times btn btn-right btn-close').appendTo(btnWrap);
+        var btnWrap = $('<div>').addClass('wrap').prependTo(this.buttonCont);
+        var btn = $('<button>').addClass('btn btn-search').text(text);
+        var close = $('<button>').addClass('fas fa-times btn btn-right btn-close');
+        
+        btnWrap.append(btn, close)
     },
     renderButtons(arr){
         $.each(arr, function(i){
             app.button(arr[i]);
         });
     },
-    renderGif(obj){
-        var date = app.formatDate(obj.import_datetime);
-        var starredIndex = app.starred.indexOf(obj.id);
+    renderCards(obj){
+        var date = this.formatDate(obj.import_datetime);
+        var starredIndex = this.starred.indexOf(obj.id);
 
         var cardWrap = $('<div>').addClass('card-wrap').prependTo('#results');
         var card = $('<div>').addClass('card bg-dark');
@@ -32,7 +34,6 @@ var app = {
         var copyBtn = $('<button>').addClass('btn btn-copy').attr('data-link', obj.embed_url);
         var copyText = $('<span>').addClass('btn-copy-text').text('Copy Link');
         var copyIcon = $('<span>').addClass('fas fa-link btn-icon');
-
 
         if (starredIndex === -1){
             star.addClass('far').attr('data-star', 'false');
@@ -51,7 +52,6 @@ var app = {
         }
 
         cardWrap.append(card, star);
-
     },
     getByTerm(term){
         var searchTerm = term.replace(' ', '%20');
@@ -64,17 +64,9 @@ var app = {
             var results = response.data;
             $('#results').empty();
             $.each(results, function(i){
-                app.renderGif(results[i]);
+                app.renderCards(results[i]);
             })
         });
-    },
-    formatDate(date){
-        var d = new Date(date);
-        var day = d.getDate();
-        var month = d.getMonth() + 1;
-        var year = d.getFullYear();
-
-        return month + '/' + day + '/' + year;
     },
     buttonClick(){
         $('#message').empty();
@@ -106,7 +98,6 @@ var app = {
             card.parent().removeClass('bg-light').addClass('bg-dark');
         }
 
-
     },
     copyToClipboard(){
         var link = $(this).attr('data-link');
@@ -119,12 +110,21 @@ var app = {
         temp.remove();
 
         btnText.text('Copied!');
+
         setTimeout(function(){
             btnText.text('Copy Link');
         }, 3000);
 
     },
-    submit(){
+    formatDate(date){
+        var d = new Date(date);
+        var day = d.getDate();
+        var month = d.getMonth() + 1;
+        var year = d.getFullYear();
+
+        return month + '/' + day + '/' + year;
+    },
+    search(){
         event.preventDefault();
         var val = $('#input').val().trim();
         if (val !== ''){
@@ -133,7 +133,7 @@ var app = {
             app.getByTerm(val);
         }
     },
-    close(){
+    delete(){
         $(this).parent().remove();
     },
     clear(){
@@ -152,7 +152,6 @@ var app = {
 
         if (starred === 'false'){
             $(this).attr('data-star', 'true').removeClass('far').addClass('fas');
-            console.log('starred' + id);
             app.starred.push(id);
 
         } else {
@@ -163,12 +162,9 @@ var app = {
                 }
             } else {
                 $(this).attr('data-star', 'false').removeClass('fas').addClass('far');
-                console.log('not starred' + id);
             }
             app.starred = app.arrayRemove(app.starred, id);
         }
-        console.log(app.starred);
-        console.log('--------------');
     },
     viewStarred(){
         event.preventDefault();
@@ -178,14 +174,12 @@ var app = {
             $('#results').empty();
             $.each(app.starred, function(i){
                 var queryUrl = 'https://api.giphy.com/v1/gifs/' + app.starred[i] + '?api_key=MhZnLZX3S3AQ3uqSWeeBpsJ8NXZXl54N';
-                console.log(queryUrl);
                 $.ajax({
                     url: queryUrl,
                     method: "GET"
                 }).then(function(response){
-                    app.renderGif(response.data);
+                    app.renderCards(response.data);
                 });
-
             });
 
         } else {
@@ -200,12 +194,12 @@ $(document).ready(function(){
     app.renderButtons(app.buttons);
 
     $(document).on('click', '.btn-search', app.buttonClick);
-    $(document).on('click', '.btn-close', app.close);
+    $(document).on('click', '.btn-close', app.delete);
     $(document).on('click', '.btn-star', app.star)
     $(document).on('click', '.card-click', app.imgClick);
     $(document).on('click', '.btn-copy', app.copyToClipboard)
     
-    $('#submit').on('click', app.submit);
+    $('#search').on('click', app.search);
     $('#starred').on('click', app.viewStarred);
     $('#clear').on('click', app.clear);
 });
