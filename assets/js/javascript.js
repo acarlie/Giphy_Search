@@ -4,7 +4,7 @@ var app = {
     starView: false,
     buttons: ["star wars", "star trek", "battlestar galactica", "dr. who", "stranger things", "x-files"],
     button(text){
-        var btnWrap = $('<div>').addClass('wrap').appendTo(app.buttonCont);
+        var btnWrap = $('<div>').addClass('wrap').prependTo(app.buttonCont);
         var btn = $('<button>').addClass('btn btn-search').text(text).appendTo(btnWrap);
         var close = $('<button>').addClass('fas fa-times btn btn-right btn-close').appendTo(btnWrap);
     },
@@ -14,18 +14,24 @@ var app = {
         });
     },
     renderGif(obj){
+        var date = app.formatDate(obj.import_datetime);
         var starredIndex = app.starred.indexOf(obj.id);
+
         var cardWrap = $('<div>').addClass('card-wrap').prependTo('#results');
-        var card = $('<div>').addClass('card bg-dark').appendTo(cardWrap);
-        var clickWrap = $('<div>').addClass('card-click').appendTo(card);
-        var img = $('<img>').addClass('img').attr('src', obj.images.fixed_height_still.url).attr('data-still', obj.images.fixed_height_still.url).attr('data-gif', obj.images.fixed_height.url).appendTo(clickWrap);
-        var list = $('<ul>').addClass('card-info').appendTo(clickWrap);
-        var title = $('<li>').text('Title: ' + obj.title);
-        var rating = $('<li>').text('Rating: ' + obj.rating);
+        var card = $('<div>').addClass('card bg-dark');
         var star = $('<button>').addClass('btn btn-star fa-star').attr('data-id', obj.id);
-        var copyBtn = $('<button>').addClass('btn btn-copy').attr('data-link', obj.embed_url).appendTo(card);
-        var copyText = $('<span>').addClass('btn-copy-text').text('Copy Link').appendTo(copyBtn);
-        var copyIcon = $('<span>').addClass('fas fa-link btn-icon').appendTo(copyBtn);
+
+        var clickWrap = $('<div>').addClass('card-click');
+        var imgWrap = $('<div>').addClass('img-wrap');
+        var play = $('<div>').addClass('img-play').html('<span class="fas fa-play"></span>');
+        var img = $('<img>').addClass('img').attr('src', obj.images.fixed_height_still.url).attr('data-still', obj.images.fixed_height_still.url).attr('data-gif', obj.images.fixed_height.url);
+        var info = $('<p>').addClass('card-info');
+        var date = $('<span>').text(date);
+        var rating = $('<span>').text('Rating: ' + obj.rating.toUpperCase());
+        
+        var copyBtn = $('<button>').addClass('btn btn-copy').attr('data-link', obj.embed_url);
+        var copyText = $('<span>').addClass('btn-copy-text').text('Copy Link');
+        var copyIcon = $('<span>').addClass('fas fa-link btn-icon');
 
 
         if (starredIndex === -1){
@@ -34,8 +40,18 @@ var app = {
             star.addClass('fas').attr('data-star', 'true');
         }
         
-        list.append(title, rating);
-        cardWrap.append(star);
+        copyBtn.append(copyText, copyIcon);
+        info.append(rating, date);
+        imgWrap.append(img, play);
+        clickWrap.append(imgWrap, info);
+        card.append(clickWrap);
+
+        if (document.queryCommandSupported("copy")){
+            card.append(copyBtn);
+        }
+
+        cardWrap.append(card, star);
+
     },
     getByTerm(term){
         var searchTerm = term.replace(' ', '%20');
@@ -49,11 +65,16 @@ var app = {
             $('#results').empty();
             $.each(results, function(i){
                 app.renderGif(results[i]);
-                // console.log(results[i]);
-
             })
-            // ScrollReveal().reveal('.card', { delay: 500 });
         });
+    },
+    formatDate(date){
+        var d = new Date(date);
+        var day = d.getDate();
+        var month = d.getMonth() + 1;
+        var year = d.getFullYear();
+
+        return month + '/' + day + '/' + year;
     },
     buttonClick(){
         $('#message').empty();
@@ -91,23 +112,17 @@ var app = {
         var link = $(this).attr('data-link');
         var btnText = $(this).children('.btn-copy-text');    
 
-        if (document.queryCommandSupported("copy")) {
+        var temp = $("<input>");
+        $('body').append(temp);
+        temp.val(link).select();
+        document.execCommand("copy");
+        temp.remove();
 
-            var temp = $("<input>");
-            $('body').append(temp);
-            temp.val(link).select();
-            document.execCommand("copy");
-            temp.remove();
+        btnText.text('Copied!');
+        setTimeout(function(){
+            btnText.text('Copy Link');
+        }, 3000);
 
-            btnText.text('Copied!');
-            setTimeout(function(){
-                btnText.text('Copy Link');
-            }, 3000);
-
-            // console.log(link);
-        } else {
-            //modal with link Url
-        }
     },
     submit(){
         event.preventDefault();
