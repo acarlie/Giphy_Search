@@ -155,12 +155,7 @@ var app = {
 
     },
     formatDate(date){
-        var d = new Date(date);
-        var day = d.getDate();
-        var month = d.getMonth() + 1;
-        var year = d.getFullYear();
-
-        return month + '/' + day + '/' + year;
+        return moment(date, "YYYY-MM-DD hh-mm-ss").fromNow();
     },
     search(){
         event.preventDefault();
