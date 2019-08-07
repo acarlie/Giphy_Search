@@ -155,7 +155,17 @@ var app = {
 
     },
     formatDate(date){
-        return moment(date, "YYYY-MM-DD hh-mm-ss").fromNow();
+        var date;
+        var postedDate = moment().diff(moment(date, "YYYY-MM-DD hh-mm-ss"), "days");
+        var giphyFounding = moment().diff(moment("02/01/2013", "MM/DD/YYYY"), "days");
+
+        if(postedDate < giphyFounding){
+            date = 'Posted ' + moment(date, "YYYY-MM-DD hh-mm-ss").fromNow();
+        } else {
+            date = 'Posted Date N/A';
+        }
+        
+        return date;
     },
     search(){
         event.preventDefault();
