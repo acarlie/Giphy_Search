@@ -11,4 +11,4 @@ Giphy search app created using Giphy's API.
 * Users can copy the 'embed' link of the gif by clicking the gif's 'copy link' button.
 * Stars and buttons are saved into the browser's local storage and persist on page reload.
 
-### See the project at: https://acarlie.github.io/Giphy_Project/.
+### See the project at: https://acarlie.com/Giphy_Search/.
